@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    body {
+        border: 2px solid #0c58aa;
+    }
+
+    main {
+        padding: 35px;
+    }
+
+    main #detail-section div {
+        margin-top: 22px;
+    }
+
+    main #detail-section h2 {
+        text-transform: uppercase;
+        font-size: 23px;
+        font-weight: bold;
+        margin: 0px;
+        color: #0c58aa;
+    }
+
+    main #detail-section p {
+        font-size: 20px;
+        margin: 7px 0px;
+    }
+
+    main #detail-section ul {
+        font-size: 20px;
+        margin: 7px 0px;
+        padding-left: 25px;
+    }
+
+    main #detail-section table {
+        font-size: 17px;
+        margin: 8px 0px;
+        border: 1px solid black;
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    main #detail-section table thead {
+        background-color: #b9b9b9;
+    }
+
+    main #detail-section table th,
+    td {
+        border: 1px solid black;
+        padding: 12px 0px;
+        text-align: center;
+    }
+
+    main #footer-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 80px;
+    }
+
+    main #footer-section img {
+        width: 85%;
+    }
+
+    main #footer-section p {
+        font-size: 24px;
+        color: #0c58aa;
+    }
+</style>
+
+<body>
+    <main>
+        <section id="detail-section">
+            <div style="margin-top: 0px;">
+                <h2>{{name}}</h2>
+                <p>{{description}}</p>
+            </div>
+            <div>
+                <h2>applications</h2>
+                <p>{{applications}}</p>
+            </div>
+            <div>
+                <h2>positions</h2>
+                <p>{{positions}}</p>
+            </div>
+            <div>
+                <h2>usage</h2>
+                <ul>
+                    {{#each usage}}
+                    <li>{{this}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div>
+                <h2>chemical composition of weld steel</h2>
+                <table>
+                    <thead>
+                        <th>C</th>
+                        <th>Mn</th>
+                        <th>Si</th>
+                        <th>S</th>
+                        <th>P</th>
+                    </thead>
+                    <tbody>
+                        {{#each chemical}}
+                        <td>{{this}}</td>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <h2>mechanical properties of weld steel</h2>
+                <table>
+                    <thead>
+                        <th>U.T.S.(N/mm²)</th>
+                        <th>U.T.S.(N/mm²)</th>
+                        <th>ELONGATION ( L = 4d ) %</th>
+                        <th>IMPACT ( CVN ) AT – 30° C ( J )</th>
+                    </thead>
+                    <tbody>
+                        {{#each mechanical}}
+                        <td>{{this}}</td>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section id="footer-section">
+            <div>
+                <img src="logo.webp" alt="logo" />
+            </div>
+            <div>
+                <p>www.kgnelectrodes.com</p>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
