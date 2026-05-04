@@ -24,8 +24,7 @@ app.use(express.static('public', {
     etag: false
 }));
 app.use('/admin', adminRouter);
-//app.use('/user', userRouter);
-app.use("/user",(req,res)=>{res.status(200).json({message:"alloo chatt"})})
+app.use('/user', userRouter);
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => { console.log(`server is running on port ${PORT}`) });
