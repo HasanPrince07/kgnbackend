@@ -25,7 +25,7 @@ app.use(express.static('public', {
 }));
 app.use('/admin', adminRouter);
 //app.use('/user', userRouter);
-app.use("/user/fetchmain",(req,res)=>{res.render("calll abckaendd")})
+app.use("/",(req,res)=>{res.render("calll abckaendd")})
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => { console.log(`server is running on port ${PORT}`) });
