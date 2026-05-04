@@ -25,6 +25,7 @@ app.use(express.static('public', {
 }));
 app.use('/admin', adminRouter);
 app.use('/user', userRouter);
+app.use("/user", (req,res)=>{console.log("backend is colll")})
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => { console.log(`server is running on port ${PORT}`) });
