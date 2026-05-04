@@ -24,8 +24,8 @@ app.use(express.static('public', {
     etag: false
 }));
 app.use('/admin', adminRouter);
-app.use('/user', userRouter);
-console.log("call backenddddd")
+//app.use('/user', userRouter);
+app.use("/user/fetchmain",(req,res)=>{res.render("calll abckaendd")})
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => { console.log(`server is running on port ${PORT}`) });
