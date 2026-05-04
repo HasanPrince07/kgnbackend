@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 app.use(compression());
-app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
+app.use(cors({ origin: ["https://kgnfrontend.onrender.com"], credentials: true }));
 
 mongoose.connect(process.env.DB_URL || `mongodb://127.0.0.1:27017/kgnelectrodes`);
 mongoose.connection.on("connected", () => console.log("DB is connected"));
