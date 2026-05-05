@@ -8,20 +8,18 @@ const adminRouter = require('./router/admin');
 const userRouter = require('./router/user');
 const app = express();
 
+mongoose.connect(process.env.DB_URL)
+    .then(() => {
+        console.log("Database connected successfully!");
+    })
+    .catch((err) => {
+        console.error("Database connection error: ", err.message);
+    });
 
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 app.use(compression());
 app.use(cors({ origin: ["https://kgnfrontend.onrender.com"], credentials: true }));
-
-mongoose.connect(process.env.DB_URL)
-  .then(() => {
-    console.log("Database connected successfully!");
-  })
-  .catch((err) => {
-    console.error("Database connection error: ", err.message);
-  });
-
 
 app.use(express.static('public', {
     maxAge: "1y",
