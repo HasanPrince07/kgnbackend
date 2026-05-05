@@ -14,9 +14,13 @@ app.use(cookieParser());
 app.use(compression());
 app.use(cors({ origin: ["https://kgnfrontend.onrender.com"], credentials: true }));
 
-mongoose.connect(process.env.DB_URL || `mongodb://127.0.0.1:27017/kgnelectrodes`);
-mongoose.connection.on("connected", () => console.log("DB is connected"));
-mongoose.connection.on("error", (err) => console.error("Error during connected with DB:", err));
+mongoose.connect(process.env.DB_URL)
+  .then(() => {
+    console.log("Database connected successfully!");
+  })
+  .catch((err) => {
+    console.error("Database connection error: ", err.message);
+  });
 
 
 app.use(express.static('public', {
