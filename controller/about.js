@@ -25,7 +25,7 @@ exports.updateabout = async (req, res) => {
         const newFeatures = JSON.parse(features);
         const newChooseus = JSON.parse(chooseus);
         const id = req.params.id
-        const newFiles = req.files?.map(file => file.filename) || [];
+        const newFiles = req.files?.map(file => file.path) || [];
         const oldData = await aboutT.findById(id).select("images -_id").lean();
         const keepImages = Array.isArray(existingImages) ? existingImages : (existingImages ? [existingImages] : []);
         const finalImages = [...keepImages, ...newFiles];
