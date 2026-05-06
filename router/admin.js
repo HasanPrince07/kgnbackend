@@ -16,7 +16,7 @@ const productC = require("../controller/product");
 const helper = require("../helper/message");
 const jwt = require("jsonwebtoken");
 const secretKey = process.env.SECRET_KEY
-const { uploadCloud } = require('../config/cloudinary');
+const { upload } = require('../config/cloudinary');
 
 const verifyToken = (req, res, next) => {
     try {
