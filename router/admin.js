@@ -16,22 +16,7 @@ const productC = require("../controller/product");
 const helper = require("../helper/message");
 const jwt = require("jsonwebtoken");
 const secretKey = process.env.SECRET_KEY
-
-const multer = require("multer");
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './public')
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + file.originalname)
-    }
-})
-
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 1024 * 1024 * 10 }
-})
+const { uploadCloud } = require('../config/cloudinary');
 
 const verifyToken = (req, res, next) => {
     try {
