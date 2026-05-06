@@ -16,7 +16,7 @@ const productC = require("../controller/product");
 const helper = require("../helper/message");
 const jwt = require("jsonwebtoken");
 const secretKey = process.env.SECRET_KEY
-const { upload } = require('../config/cloudinary');
+const { uploadCloud } = require('../config/cloudinary');
 
 const verifyToken = (req, res, next) => {
     try {
@@ -38,7 +38,7 @@ const verifyToken = (req, res, next) => {
 };
 
 router.get("/fetchmain", verifyToken, mainC.fetchmain);
-router.put("/updatemain/:id", upload.array("images", 10), verifyToken, mainC.updatemain);
+router.put("/updatemain/:id", uploadCloud.array("images", 10), verifyToken, mainC.updatemain);
 
 router.get("/fetchuser", verifyToken, userC.fetchuser);
 router.put("/updateuser/:id", verifyToken, userC.updateuser);
@@ -54,7 +54,7 @@ router.post("/actionnumber/:id", verifyToken, numberC.actionnumber);
 router.get("/deletenumber/:id", verifyToken, numberC.deletenumber);
 
 router.get("/fetchcertificate", verifyToken, certificateC.fetchcertificate);
-router.put("/updatecertificate/:id", upload.array("images", 10), verifyToken, certificateC.updatecertificate);
+router.put("/updatecertificate/:id", uploadCloud.array("images", 10), verifyToken, certificateC.updatecertificate);
 
 router.get("/fetchpolicy", verifyToken, policyC.fetchpolicy);
 router.put("/updatepolicy/:id", verifyToken, policyC.updatepolicy);
@@ -75,23 +75,23 @@ router.get("/deleteapply/:id", verifyToken, applyC.deleteapply);
 router.post("/multideleteapply", verifyToken, applyC.multideleteapply);
 
 router.get("/fetchabout", verifyToken, aboutC.fetchabout);
-router.put("/updateabout/:id", upload.array("images", 10), verifyToken, aboutC.updateabout);
+router.put("/updateabout/:id", uploadCloud.array("images", 10), verifyToken, aboutC.updateabout);
 
 router.get("/fetchwallpaper/:id", verifyToken, wallpaperC.fetchwallpaper);
 router.get("/fetchwallpaperbyid/:id", verifyToken, wallpaperC.fetchwallpaperbyid);
-router.put("/updatewallpaper/:id", upload.single("image"), verifyToken, wallpaperC.updatewallpaper);
+router.put("/updatewallpaper/:id", uploadCloud.single("image"), verifyToken, wallpaperC.updatewallpaper);
 
 router.get("/fetchcontact", verifyToken, contactC.fetchcontact);
-router.put("/updatecontact/:id", upload.single("image"), verifyToken, contactC.updatecontact);
+router.put("/updatecontact/:id", uploadCloud.single("image"), verifyToken, contactC.updatecontact);
 
 router.get("/fetchquery/:id", verifyToken, queryC.fetchquery);
 router.get("/deletequery/:id", verifyToken, queryC.deletequery);
 router.post("/multideletequery", verifyToken, queryC.multideletequery);
 router.get("/fetchquerybyid/:id", verifyToken, queryC.fetchquerybyid);
-router.post("/replyquery/:id", upload.single("image"), verifyToken, queryC.replyquery);
+router.post("/replyquery/:id", uploadCloud.single("image"), verifyToken, queryC.replyquery);
 
 router.get("/fetchproduct", verifyToken, productC.fetchproduct);
-router.post("/addproduct", upload.single("image"), verifyToken, productC.addproduct);
+router.post("/addproduct", uploadCloud.single("image"), verifyToken, productC.addproduct);
 router.get("/deleteproduct/:id", verifyToken, productC.deleteproduct);
 router.get("/fetchproductbyid/:id", verifyToken, productC.fetchproductbyid);
 
