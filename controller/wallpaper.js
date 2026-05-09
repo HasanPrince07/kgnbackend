@@ -1,7 +1,6 @@
 const wallpaperT = require("../model/wallpaper");
 const helper = require("../helper/message");
-const path = require("path");
-const fs = require("fs");
+const { cloudinary } = require('../config/cloudinary');
 
 exports.fetchwallpaper = async (req, res) => {
     try {
@@ -44,7 +43,7 @@ exports.updatewallpaper = async (req, res) => {
     try {
         const { title, existingImage } = req.body
         const id = req.params.id
-        const newFile = req.file?.filename
+        const newFile = req.file?.path
         let oldData = await wallpaperT.findById(id).select("image -_id").lean();
         let finalImage = existingImage;
         let shouldDelete = false;
