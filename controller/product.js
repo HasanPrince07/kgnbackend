@@ -114,10 +114,11 @@ exports.downloadbrochure = async (req, res) => {
         const imageDataUri = `data:image/webp;base64,${bitmap.toString('base64')}`;
         finalHtml = finalHtml.replace('logo.webp', imageDataUri);
 
-        await page.setContent(finalHtml, { waitUntil: 'networkidle0',timeout: 60000 });
+        await page.setContent(finalHtml, { waitUntil: 'networkidle0', timeout: 60000 });
         const pdfBuffer = await page.pdf({
             format: 'A4',
             printBackground: true,
+            timeout: 60000,
             margin: { top: '10px', right: '10px', bottom: '10px', left: '10px' }
         });
         await browser.close();
