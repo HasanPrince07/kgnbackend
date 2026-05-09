@@ -1,7 +1,6 @@
 const contactT = require("../model/contact");
 const helper = require("../helper/message");
-const path = require("path");
-const fs = require("fs");
+const { cloudinary } = require('../config/cloudinary');
 
 exports.fetchcontact = async (req, res) => {
     try {
@@ -23,7 +22,7 @@ exports.updatecontact = async (req, res) => {
     try {
         const { phone, email, map, whatsapp, linkedin, facebook, address, footer, existingImage } = req.body
         const id = req.params.id
-        const newFile = req.file?.filename;
+        const newFile = req.file?.path;
         let oldData = await contactT.findById(id).select("image -_id").lean();
         let finalImage = existingImage;
         let shouldDelete = false;
