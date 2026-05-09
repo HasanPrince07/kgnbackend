@@ -33,7 +33,7 @@ exports.updatecontact = async (req, res) => {
             shouldDelete = true;
         }
         if (shouldDelete && oldData.image) {
-                const afterUpload = img.split("/upload/")[1]
+                const afterUpload = oldData.image.split("/upload/")[1]
                 const withExtension = afterUpload.split("/").splice(1).join("/");
                 const publicId = withExtension.split('.')[0]
                 console.log("Deleting ID:", publicId);
