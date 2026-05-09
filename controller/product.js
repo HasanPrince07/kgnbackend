@@ -99,7 +99,7 @@ exports.deleteproduct = async (req, res) => {
 exports.downloadbrochure = async (req, res) => {
     try {
         const dynamicData = req.body
-        const browser = await puppeteer.launch({ headless: "new", args: ['--no-sandbox', '--disable-setuid-sandbox', '--single-process', '--no-zygote'] });
+        const browser = await puppeteer.launch({ headless: "new", args: ['--no-sandbox', '--disable-setuid-sandbox', '--single-process', '--disable-dev-shm-usage'] });
         const page = await browser.newPage();
 
         const brochureDir = path.join(__dirname, "..", "brochure");
