@@ -31,7 +31,7 @@ exports.updatecertificate = async (req, res) => {
                 const withExtension = afterUpload.split("/").splice(1).join("/");
                 const publicId = withExtension.split('.')[0]
                 console.log("Deleting ID:", publicId);
-                return await cloudinary.uploader.destroy(publicId);
+                await cloudinary.uploader.destroy(publicId);
             }));
         }
         const updatedData = await certificateT.findByIdAndUpdate(id, { images: finalImages }, {
