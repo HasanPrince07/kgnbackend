@@ -1,7 +1,5 @@
 const certificateT = require("../model/certificate");
 const helper = require("../helper/message");
-const path = require("path");
-const fs = require("fs").promises;
 
 exports.fetchcertificate = async (req, res) => {
     try {
@@ -21,15 +19,14 @@ exports.updatecertificate = async (req, res) => {
     try {
         const { existingImages } = req.body;
         const id = req.params.id;
-        const newFiles = req.files?.map(file => file.filename) || [];
+        const newFiles = req.files?.map(file => file.path) || [];
         const oldData = await certificateT.findById(id).select("images -_id").lean();
         const keepImages = Array.isArray(existingImages) ? existingImages : (existingImages ? [existingImages] : []);
         const finalImages = [...keepImages, ...newFiles];
         const imagesToDelete = oldData.images.filter(img => !finalImages.includes(img));
         if (imagesToDelete.length > 0) {
             Promise.all(imagesToDelete.map(async (img) => {
-                const imgPath = path.join(__dirname, "../public", img);
-                return fs.unlink(imgPath).catch(error => console.error("Error during file delete:", error));
+                
             }));
         }
         const updatedData = await certificateT.findByIdAndUpdate(id, { images: finalImages }, {
