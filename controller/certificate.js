@@ -27,7 +27,11 @@ exports.updatecertificate = async (req, res) => {
         const imagesToDelete = oldData.images.filter(img => !finalImages.includes(img));
         if (imagesToDelete.length > 0) {
             Promise.all(imagesToDelete.map(async (img) => {
-                
+                const afterUpload = img.split("/upload/")[1]
+                const withExtension = afterUpload.split("/").splice(1).join("/");
+                const publicId = withExtension.split('.')[0]
+                console.log("Deleting ID:", publicId);
+                return await cloudinary.uploader.destroy(publicId);
             }));
         }
         const updatedData = await certificateT.findByIdAndUpdate(id, { images: finalImages }, {
