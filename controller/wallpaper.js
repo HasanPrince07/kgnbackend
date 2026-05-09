@@ -54,8 +54,11 @@ exports.updatewallpaper = async (req, res) => {
             shouldDelete = true;
         }
         if (shouldDelete && oldData.image) {
-            const imgPath = path.join(__dirname, "../public", oldData.image);
-            fs.promises.unlink(imgPath).catch(error => console.error("Error during file delete:", error));
+            const afterUpload = oldData.image.split("/upload/")[1]
+                const withExtension = afterUpload.split("/").splice(1).join("/");
+                const publicId = withExtension.split('.')[0]
+                console.log("Deleting ID:", publicId);
+                return await cloudinary.uploader.destroy(publicId);
         }
         const updatedData = await wallpaperT.findByIdAndUpdate(id, { title, image: finalImage }, {
             new: true,
