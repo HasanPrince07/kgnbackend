@@ -29,8 +29,11 @@ exports.updatemain = async (req, res) => {
         const imagesToDelete = oldData.images.filter(img => !finalImages.includes(img));
         if (imagesToDelete.length > 0) {
             Promise.all(imagesToDelete.map(async (img) => {
-                const imgPath = path.join(__dirname, "../public", img);
-                return fs.unlink(imgPath).catch(error => console.error("Error during file delete:", error));
+                const afterUpload = img.split("/upload/")[1]
+                const withExtension = afterUpload.split("/").splice(1).join("/");
+                const publicId = withExtension.split('.')[0]
+                console.log("Deleting ID:", publicId);
+                return await cloudinary.uploader.destroy(publicId);
             }));
         }
         const updatedData = await mainT.findByIdAndUpdate(id, { title, description, images: finalImages }, {
