@@ -1,5 +1,6 @@
 const certificateT = require("../model/certificate");
 const helper = require("../helper/message");
+const { cloudinary } = require('../config/cloudinary');
 
 exports.fetchcertificate = async (req, res) => {
     try {
