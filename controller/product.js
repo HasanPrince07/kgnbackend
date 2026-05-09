@@ -2,6 +2,8 @@ const productT = require("../model/product");
 const helper = require("../helper/message");
 const handlebars = require("handlebars");
 const puppeteer = require("puppeteer");
+const path = require("path");
+const fs = require("fs");
 const { cloudinary } = require('../config/cloudinary');
 
 exports.fetchproduct = async (req, res) => {
