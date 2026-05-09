@@ -1,7 +1,6 @@
 const mainT = require("../model/main");
 const helper = require("../helper/message");
-const path = require("path");
-const fs = require("fs").promises;
+const { cloudinary } = require('../config/cloudinary');
 
 exports.fetchmain = async (req, res) => {
     try {
@@ -23,7 +22,7 @@ exports.updatemain = async (req, res) => {
     try {
         const { title, description, existingImages } = req.body;
         const id = req.params.id;
-        const newFiles = req.files?.map(file => file.filename) || [];
+        const newFiles = req.files?.map(file => file.path) || [];
         const oldData = await mainT.findById(id).select("images -_id").lean();
         const keepImages = Array.isArray(existingImages) ? existingImages : (existingImages ? [existingImages] : []);
         const finalImages = [...keepImages, ...newFiles];
