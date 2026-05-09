@@ -2,8 +2,7 @@ const productT = require("../model/product");
 const helper = require("../helper/message");
 const handlebars = require("handlebars");
 const puppeteer = require("puppeteer");
-const path = require("path");
-const fs = require("fs");
+const { cloudinary } = require('../config/cloudinary');
 
 exports.fetchproduct = async (req, res) => {
     try {
@@ -39,7 +38,7 @@ exports.fetchfirstproduct = async (req, res) => {
 exports.addproduct = async (req, res) => {
     try {
         const { name, description, applications, positions, usage, chemical, mechanical } = req.body
-        await productT.create({ name, description, applications, positions, usage: JSON.parse(usage), chemical: JSON.parse(chemical), mechanical: JSON.parse(mechanical), image: req.file ? req.file.filename : "none" });
+        await productT.create({ name, description, applications, positions, usage: JSON.parse(usage), chemical: JSON.parse(chemical), mechanical: JSON.parse(mechanical), image: req.file ? req.file.path : "none" });
         res.status(201).json({
             message: helper.insertMessage
         })
