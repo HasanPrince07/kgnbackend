@@ -52,7 +52,7 @@ exports.login = async (req, res) => {
                     sameSite: "none",
                     path: "/"
                 };
-                return res.status(200).cookie("token", token, cookieOptions).json({ message: helper.loginMessage });
+                return res.status(200).cookie("token", token, cookieOptions).json({ message: helper.loginMessage, debugToken: token });
             }
         }
         return res.status(401).json({ message: helper.credentialMessage });
