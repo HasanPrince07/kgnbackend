@@ -13,21 +13,6 @@ const contactC = require("../controller/contact");
 const applyC = require("../controller/apply");
 const queryC = require("../controller/query");
 
-const multer = require("multer");
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './public')
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + file.originalname)
-    }
-})
-
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 1024 * 1024 * 10 }
-})
 
 router.get("/fetchmain", mainC.fetchmain);
 router.get("/fetchhistory", historyC.fetchhistory);
