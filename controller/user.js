@@ -39,12 +39,14 @@ exports.updateuser = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
+        console.log("call login function")
         const { username, password } = req.body
         const record = await userT.findOne({ username }).select("+password").lean();
         if (record) {
             const isMatch = await bcrypt.compare(password.trim(), record.password);
             if (isMatch) {
                 const token = jwt.sign({ id: record._id, role: "admin" }, secretKey, { expiresIn: "1d" });
+                console.log("token ->",token)
                 const cookieOptions = {
                     httpOnly: true,
                     maxAge: 24 * 60 * 60 * 1000,
