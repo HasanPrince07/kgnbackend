@@ -20,7 +20,6 @@ const { uploadCloud } = require('../config/cloudinary');
 
 const verifyToken = (req, res, next) => {
     try {
-        console.log("req.headers ->",req.headers)
         const token = req.cookies.token;
         if (!token) return res.status(401).json({ message: helper.deniedMessage });
         jwt.verify(token, secretKey, (error, valid) => {
