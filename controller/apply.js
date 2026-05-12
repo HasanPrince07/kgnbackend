@@ -81,6 +81,18 @@ exports.deleteapply = async (req, res) => {
 exports.multideleteapply = async (req, res) => {
     try {
         const ids = req.body
+        const records = await applyT.find({ _id: { $in: ids }, file: { $ne: "none" } });
+        if (records.length > 0) {
+            await Promise.all(records.map(async (dt) => {
+                if (dt.file !== "none") {
+                    const afterUpload = dt.file.split("/upload/")[1]
+                    const withExtension = afterUpload.split("/").splice(1).join("/");
+                    const publicId = withExtension.split('.')[0]
+                    console.log("Deleting ID:", publicId);
+                    await cloudinary.uploader.destroy(publicId);
+                }
+            }));
+        }
         await applyT.deleteMany({ _id: { $in: ids } });
         res.status(200).json({
             message: helper.deleteMessage
