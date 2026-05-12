@@ -12,6 +12,7 @@ const wallpaperC = require("../controller/wallpaper");
 const contactC = require("../controller/contact");
 const applyC = require("../controller/apply");
 const queryC = require("../controller/query");
+const { uploadCloud } = require('../config/cloudinary');
 
 
 router.get("/fetchmain", mainC.fetchmain);
@@ -26,7 +27,7 @@ router.get("/fetchabout", aboutC.fetchabout);
 router.get("/fetchwallpaper/:id", wallpaperC.fetchwallpaper);
 router.get("/fetchcontact", contactC.fetchcontact);
 
-router.post("/addapply", upload.single("file"), applyC.addapply);
+router.post("/addapply", uploadCloud.single("file"), applyC.addapply);
 router.post("/addquery", queryC.addquery);
 
 router.get("/fetchcareerbyid/:id", careerC.fetchcareerbyid);
