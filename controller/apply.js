@@ -1,5 +1,6 @@
 const applyT = require("../model/apply");
 const helper = require("../helper/message");
+const { cloudinary } = require('../config/cloudinary');
 
 exports.fetchapply = async (req, res) => {
     try {
@@ -39,7 +40,7 @@ exports.addapply = async (req, res) => {
         if (req.file === undefined) {
             var file = "none"
         } else {
-            var file = req.file.filename
+            var file = req.file.path
         }
         const record = new applyT({ title: title, name: name, email: email, phone: phone, message: message, file: file });
         await record.save();
