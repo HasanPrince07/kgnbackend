@@ -58,6 +58,14 @@ exports.addapply = async (req, res) => {
 exports.deleteapply = async (req, res) => {
     try {
         const id = req.params.id
+        const record = await applyT.findById(id);
+        if (record.image !== "none") {
+            const afterUpload = record.image.split("/upload/")[1]
+            const withExtension = afterUpload.split("/").splice(1).join("/");
+            const publicId = withExtension.split('.')[0]
+            console.log("Deleting ID:", publicId);
+            await cloudinary.uploader.destroy(publicId);
+        }
         await applyT.findByIdAndDelete(id);
         res.status(200).json({
             message: helper.deleteMessage
