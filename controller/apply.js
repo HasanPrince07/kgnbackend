@@ -59,8 +59,8 @@ exports.deleteapply = async (req, res) => {
     try {
         const id = req.params.id
         const record = await applyT.findById(id);
-        if (record.image !== "none") {
-            const afterUpload = record.image.split("/upload/")[1]
+        if (record.file !== "none") {
+            const afterUpload = record.file.split("/upload/")[1]
             const withExtension = afterUpload.split("/").splice(1).join("/");
             const publicId = withExtension.split('.')[0]
             console.log("Deleting ID:", publicId);
