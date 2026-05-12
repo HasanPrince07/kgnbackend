@@ -48,8 +48,8 @@ exports.login = async (req, res) => {
                 const cookieOptions = {
                     httpOnly: true,
                     maxAge: 24 * 60 * 60 * 1000,
-                    secure: process.env.NODE_ENV === "production",
-                    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+                    secure: true,
+                    sameSite: "none",
                     path: "/"
                 };
                 return res.status(200).cookie("token", token, cookieOptions).json({ message: helper.loginMessage });
