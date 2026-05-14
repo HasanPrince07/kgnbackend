@@ -63,7 +63,7 @@ exports.deleteapply = async (req, res) => {
             const afterUpload = record.file.split("/upload/")[1]
             const withExtension = afterUpload.split("/").splice(1).join("/");
             if(record.file.includes("/image/")){
-               const publicId = withExtension.split('.')[0]
+               var publicId = withExtension.split('.')[0]
             }
             console.log("Deleting ID:", publicId);
             await cloudinary.uploader.destroy(publicId);
@@ -89,7 +89,7 @@ exports.multideleteapply = async (req, res) => {
                 const afterUpload = dt.file.split("/upload/")[1]
                 const withExtension = afterUpload.split("/").splice(1).join("/");
                 if(dt.file.includes("/image/")){
-                   const publicId = withExtension.split('.')[0]
+                   var publicId = withExtension.split('.')[0]
                 }
                 console.log("Deleting ID:", publicId);
                 await cloudinary.uploader.destroy(publicId);
