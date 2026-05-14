@@ -62,10 +62,7 @@ exports.deleteapply = async (req, res) => {
         if (record.file !== "none") {
             const afterUpload = record.file.split("/upload/")[1]
             const withExtension = afterUpload.split("/").splice(1).join("/");
-            if(record.file.includes("/image/")){
-               var publicId = withExtension.split('.')[0]
-            }
-            var publicId = withExtension
+            const publicId = record.file.includes("/image/") ? withExtension.split('.')[0] : withExtension
             console.log("Deleting ID:", publicId);
             await cloudinary.uploader.destroy(publicId);
         }
@@ -89,10 +86,7 @@ exports.multideleteapply = async (req, res) => {
             await Promise.all(records.map(async (dt) => {
                 const afterUpload = dt.file.split("/upload/")[1]
                 const withExtension = afterUpload.split("/").splice(1).join("/");
-                if(dt.file.includes("/image/")){
-                   var publicId = withExtension.split('.')[0]
-                }
-                var publicId = withExtension
+                const publicId = dt.file.includes("/image/") ? withExtension.split('.')[0] : withExtension
                 console.log("Deleting ID:", publicId);
                 await cloudinary.uploader.destroy(publicId);
             }));
