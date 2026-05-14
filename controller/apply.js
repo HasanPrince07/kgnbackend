@@ -96,7 +96,7 @@ exports.multideleteapply = async (req, res) => {
                 const withExtension = afterUpload.split("/").splice(1).join("/");
                 let publicId = withExtension;
                 let options = {};
-                if (record.file.includes("/raw/")) {
+                if (dt.file.includes("/raw/")) {
                     publicId = withExtension;
                     options.resource_type = "raw";
                 } else {
