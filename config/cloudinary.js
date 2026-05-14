@@ -9,15 +9,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// const storage = new CloudinaryStorage({
-//   cloudinary: cloudinary,
-//   params: {
-//     folder: 'kgn_electrodes',
-//     allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'pdf'],
-//     transformation: [{ width: 1000, crop: 'limit' }]
-//   }
-// });
-
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
