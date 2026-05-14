@@ -62,9 +62,17 @@ exports.deleteapply = async (req, res) => {
         if (record.file !== "none") {
             const afterUpload = record.file.split("/upload/")[1]
             const withExtension = afterUpload.split("/").splice(1).join("/");
-            const publicId = record.file.includes("/image/") ? withExtension.split('.')[0] : withExtension
-            console.log("Deleting ID:", publicId);
-            await cloudinary.uploader.destroy(publicId);
+            let publicId = withExtension;
+            let options = {};
+            if (record.file.includes("/raw/")) {
+                publicId = withExtension;
+                options.resource_type = "raw";
+            } else {
+                publicId = withExtension.split('.')[0]
+                options.resource_type = "image";
+            }
+            console.log("Deleting Public ID:", publicId, "with options:", options);
+            await cloudinary.uploader.destroy(publicId, options);
         }
         await applyT.findByIdAndDelete(id);
         res.status(200).json({
@@ -86,9 +94,17 @@ exports.multideleteapply = async (req, res) => {
             await Promise.all(records.map(async (dt) => {
                 const afterUpload = dt.file.split("/upload/")[1]
                 const withExtension = afterUpload.split("/").splice(1).join("/");
-                const publicId = dt.file.includes("/image/") ? withExtension.split('.')[0] : withExtension
-                console.log("Deleting ID:", publicId);
-                await cloudinary.uploader.destroy(publicId);
+                let publicId = withExtension;
+                let options = {};
+                if (record.file.includes("/raw/")) {
+                    publicId = withExtension;
+                    options.resource_type = "raw";
+                } else {
+                    publicId = withExtension.split('.')[0]
+                    options.resource_type = "image";
+                }
+                console.log("Deleting Public ID:", publicId, "with options:", options);
+                await cloudinary.uploader.destroy(publicId, options);
             }));
         }
         await applyT.deleteMany({ _id: { $in: ids } });
