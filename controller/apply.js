@@ -1,5 +1,6 @@
 const applyT = require("../model/apply");
 const helper = require("../helper/message");
+const https = require('https');
 const { cloudinary } = require('../config/cloudinary');
 
 exports.fetchapply = async (req, res) => {
@@ -42,7 +43,6 @@ exports.addapply = async (req, res) => {
         } else {
             var file = req.file.path
         }
-        console.log(req.file)
         const record = new applyT({ title: title, name: name, email: email, phone: phone, message: message, file: file });
         await record.save();
         res.status(201).json({
@@ -119,3 +119,45 @@ exports.multideleteapply = async (req, res) => {
         });
     }
 }
+
+exports.downloadPdf = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const record = await applyT.findById(id);
+
+        if (!record || record.file === "none") {
+            return res.status(404).json({ message: "फाइल नहीं मिली" });
+        }
+
+        const cloudinaryUrl = record.file;
+
+        // ब्राउज़र को बताएं कि यह एक डाउनलोड होने वाली पीडीएफ फाइल है
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=application_document.pdf');
+
+        // https.get का उपयोग करके क्लाउडिनरी से सीधे फाइल डाउनलोड और स्ट्रीम करें
+        https.get(cloudinaryUrl, (cloudinaryResponse) => {
+            // चेक करें कि क्या क्लाउडिनरी से सही रिस्पॉन्स (200 OK) मिला है
+            if (cloudinaryResponse.statusCode === 200) {
+                // क्लाउडिनरी के डेटा को सीधे फ्रंटएंड (res) पर पाइप (Stream) कर दें
+                cloudinaryResponse.pipe(res);
+            } else {
+                console.error("Cloudinary Error Status:", cloudinaryResponse.statusCode);
+                if (!res.headersSent) {
+                    res.status(500).send("क्लाउडिनary सर्वर से फाइल नहीं मिल सकी");
+                }
+            }
+        }).on('error', (e) => {
+            console.error("HTTPS Request Error:", e);
+            if (!res.headersSent) {
+                res.status(500).send("डाउनलोड के दौरान नेटवर्क एरर आई");
+            }
+        });
+
+    } catch (error) {
+        console.error("बैकएंड डाउनलोड एरर:", error);
+        if (!res.headersSent) {
+            res.status(500).send("सर्वर एरर");
+        }
+    }
+};
