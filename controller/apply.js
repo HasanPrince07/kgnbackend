@@ -120,7 +120,7 @@ exports.multideleteapply = async (req, res) => {
     }
 }
 
-exports.downloadPdf = async (req, res) => {
+exports.downloadPDF = async (req, res) => {
     try {
         const id = req.params.id;
         const record = await applyT.findById(id);
