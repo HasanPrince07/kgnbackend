@@ -130,7 +130,7 @@ exports.downloadPDF = async (req, res) => {
             return res.status(404).json({ message: "फाइल नहीं मिली" });
         }
         const cloudinaryUrl = record.file;
-        console.log(cloudinaryUrl)
+        console.log("cloudinaryUrl ->",cloudinaryUrl)
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'attachment; filename=application_document.pdf');
         https.get(cloudinaryUrl, (cloudinaryResponse) => {
