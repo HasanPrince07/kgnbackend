@@ -123,9 +123,9 @@ exports.multideleteapply = async (req, res) => {
 exports.downloadPDF = async (req, res) => {
     try {
         const id = req.params.id;
-        console.log(id)
+        console.log("id ->",id)
         const record = await applyT.findById(id);
-        console.log(record)
+        console.log("record ->",record)
         if (!record || record.file === "none") {
             return res.status(404).json({ message: "फाइल नहीं मिली" });
         }
