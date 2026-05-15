@@ -123,23 +123,18 @@ exports.multideleteapply = async (req, res) => {
 exports.downloadPDF = async (req, res) => {
     try {
         const id = req.params.id;
+        console.log(id)
         const record = await applyT.findById(id);
-
+        console.log(record)
         if (!record || record.file === "none") {
             return res.status(404).json({ message: "फाइल नहीं मिली" });
         }
-
         const cloudinaryUrl = record.file;
-
-        // ब्राउज़र को बताएं कि यह एक डाउनलोड होने वाली पीडीएफ फाइल है
+        console.log(cloudinaryUrl)
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'attachment; filename=application_document.pdf');
-
-        // https.get का उपयोग करके क्लाउडिनरी से सीधे फाइल डाउनलोड और स्ट्रीम करें
         https.get(cloudinaryUrl, (cloudinaryResponse) => {
-            // चेक करें कि क्या क्लाउडिनरी से सही रिस्पॉन्स (200 OK) मिला है
             if (cloudinaryResponse.statusCode === 200) {
-                // क्लाउडिनरी के डेटा को सीधे फ्रंटएंड (res) पर पाइप (Stream) कर दें
                 cloudinaryResponse.pipe(res);
             } else {
                 console.error("Cloudinary Error Status:", cloudinaryResponse.statusCode);
@@ -153,7 +148,6 @@ exports.downloadPDF = async (req, res) => {
                 res.status(500).send("डाउनलोड के दौरान नेटवर्क एरर आई");
             }
         });
-
     } catch (error) {
         console.error("बैकएंड डाउनलोड एरर:", error);
         if (!res.headersSent) {
