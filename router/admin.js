@@ -73,6 +73,7 @@ router.get("/fetchapply", verifyToken, applyC.fetchapply);
 router.get("/fetchapplybyid/:id", verifyToken, applyC.fetchapplybyid);
 router.get("/deleteapply/:id", verifyToken, applyC.deleteapply);
 router.post("/multideleteapply", verifyToken, applyC.multideleteapply);
+router.get("/downloadPDF/:id", verifyToken, applyC.downloadPDF);
 
 router.get("/fetchabout", verifyToken, aboutC.fetchabout);
 router.put("/updateabout/:id", uploadCloud.array("images", 10), verifyToken, aboutC.updateabout);
