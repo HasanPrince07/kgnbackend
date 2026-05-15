@@ -42,6 +42,7 @@ exports.addapply = async (req, res) => {
         } else {
             var file = req.file.path
         }
+        console.log(req.file)
         const record = new applyT({ title: title, name: name, email: email, phone: phone, message: message, file: file });
         await record.save();
         res.status(201).json({
