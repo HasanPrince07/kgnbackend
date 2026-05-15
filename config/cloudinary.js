@@ -19,6 +19,7 @@ const storage = new CloudinaryStorage({
         folder: 'kgn_electrodes',
         resource_type: 'raw',
         public_id: `${uniqueName}.pdf`,
+        flags: 'attachment'
       };
     }
     return {
