@@ -13,19 +13,11 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
     const isPdf = file.mimetype === 'application/pdf';
-    if (isPdf) {
-      const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9);
-      return {
-        folder: 'kgn_electrodes',
-        resource_type: 'raw',
-        public_id: `${uniqueName}.pdf`,
-      };
-    }
     return {
       folder: 'kgn_electrodes',
-      resource_type: 'image',
-      allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-      transformation: [{ width: 1000, crop: 'limit' }]
+      resource_type: isPdf ? 'raw' : 'image',
+      allowed_formats: isPdf ? ['pdf'] : ['jpg', 'jpeg', 'png', 'webp'],
+      transformation: isPdf ? [] : [{ width: 1000, crop: 'limit' }]
     };
   }
 });
