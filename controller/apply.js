@@ -127,7 +127,7 @@ exports.downloadPDF = async (req, res) => {
         const record = await applyT.findById(id);
         console.log("record ->",record)
         if (!record || record.file === "none") {
-            return res.status(404).json({ message: "फाइल नहीं मिली" });
+            return res.status(404).json({ message: helper.dataMessage });
         }
         const cloudinaryUrl = record.file;
         console.log("cloudinaryUrl ->",cloudinaryUrl)
@@ -139,19 +139,19 @@ exports.downloadPDF = async (req, res) => {
             } else {
                 console.error("Cloudinary Error Status:", cloudinaryResponse.statusCode);
                 if (!res.headersSent) {
-                    res.status(500).send("क्लाउडिनary सर्वर से फाइल नहीं मिल सकी");
+                    res.status(500).json({ message: "Could not get file from Cloudinary server" });
                 }
             }
         }).on('error', (e) => {
             console.error("HTTPS Request Error:", e);
             if (!res.headersSent) {
-                res.status(500).send("डाउनलोड के दौरान नेटवर्क एरर आई");
+                res.status(500).json({ message: "A network error occurred during download" });
             }
         });
     } catch (error) {
-        console.error("बैकएंड डाउनलोड एरर:", error);
+        console.log("Error during download file:", error);
         if (!res.headersSent) {
-            res.status(500).send("सर्वर एरर");
+            res.status(500).json({ message: helper.serverMessage });
         }
     }
 };
