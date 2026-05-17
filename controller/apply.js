@@ -1,6 +1,5 @@
 const applyT = require("../model/apply");
 const helper = require("../helper/message");
-const https = require('https');
 const { cloudinary } = require('../config/cloudinary');
 
 exports.fetchapply = async (req, res) => {
@@ -119,39 +118,3 @@ exports.multideleteapply = async (req, res) => {
         });
     }
 }
-
-exports.downloadPDF = async (req, res) => {
-    try {
-        const id = req.params.id;
-        console.log("id ->",id)
-        const record = await applyT.findById(id);
-        console.log("record ->",record)
-        if (!record || record.file === "none") {
-            return res.status(404).json({ message: helper.dataMessage });
-        }
-        const cloudinaryUrl = record.file;
-        console.log("cloudinaryUrl ->",cloudinaryUrl)
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'attachment; filename=application_document.pdf');
-        https.get(cloudinaryUrl, (cloudinaryResponse) => {
-            if (cloudinaryResponse.statusCode === 200) {
-                cloudinaryResponse.pipe(res);
-            } else {
-                console.error("Cloudinary Error Status:", cloudinaryResponse.statusCode);
-                if (!res.headersSent) {
-                    res.status(500).json({ message: "Could not get file from Cloudinary server" });
-                }
-            }
-        }).on('error', (e) => {
-            console.error("HTTPS Request Error:", e);
-            if (!res.headersSent) {
-                res.status(500).json({ message: "A network error occurred during download" });
-            }
-        });
-    } catch (error) {
-        console.log("Error during download file:", error);
-        if (!res.headersSent) {
-            res.status(500).json({ message: helper.serverMessage });
-        }
-    }
-};
