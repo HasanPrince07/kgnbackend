@@ -19,7 +19,7 @@ mongoose.connect(process.env.DB_URL)
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 app.use(compression());
-app.use(cors({ origin: ["https://kgnfrontend.onrender.com"], credentials: true }));
+app.use(cors({ origin: ["www.kgnelectrodes.com", "kgnelectrodes.com"], credentials: true }));
 
 app.use(express.static('public', {
     maxAge: "1y",
