@@ -1,6 +1,5 @@
 const queryT = require("../model/query");
 const helper = require("../helper/message");
-const fs = require("fs");
 const { Resend } = require("resend");
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -107,10 +106,9 @@ exports.replyquery = async (req, res) => {
         let attachments = [];
         if (req.file) {
             const filepath = req.file.path;
-            const fileBuffer = fs.readFileSync(filepath);
             attachments.push({
                 filename: req.file.originalname,
-                content: fileBuffer,
+                path: filepath,
             });
         }
         console.log("attacthments ->",attachments)
