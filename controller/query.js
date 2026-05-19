@@ -105,10 +105,9 @@ exports.replyquery = async (req, res) => {
     try {
         let attachments = [];
         if (req.file) {
-            const filepath = req.file.path;
             attachments.push({
                 filename: req.file.originalname,
-                path: filepath,
+                path: req.file.path
             });
         }
         console.log("attacthments ->",attachments)
@@ -124,9 +123,6 @@ exports.replyquery = async (req, res) => {
             return res.status(400).json({ message: helper.sentMessage });
         }
         await queryT.findByIdAndUpdate(id, { status: 'replied' });
-        if (req.file) {
-            fs.unlinkSync(req.file.path);
-        }
         return res.status(200).json({ message: helper.emailMessage });
     } catch (error) {
         console.error("Error during sent email:", error);
