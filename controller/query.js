@@ -125,11 +125,8 @@ exports.replyquery = async (req, res) => {
         }
         await queryT.findByIdAndUpdate(id, { status: 'replied' });
         if (req.file) {
-            const afterUpload = req.file.path.split("/upload/")[1]
-            const withExtension = afterUpload.split("/").splice(1).join("/");
-            const publicId = withExtension.split('.')[0]
-            console.log("Deleting Public ID:", publicId);
-            await cloudinary.uploader.destroy(publicId);
+            console.log("Deleting Public ID:", req.file.filename);
+            await cloudinary.uploader.destroy(req.file.filename);
         }
         return res.status(200).json({ message: helper.emailMessage });
     } catch (error) {
