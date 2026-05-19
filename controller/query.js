@@ -122,6 +122,11 @@ exports.replyquery = async (req, res) => {
             return res.status(400).json({ message: helper.sentMessage });
         }
         await queryT.findByIdAndUpdate(id, { status: 'replied' });
+        if (req.file) {
+            const publicId = req.file.filename; 
+            await cloudinary.uploader.destroy(publicId);
+            console.log(`Cloudinary asset deleted successfully: ${publicId}`);
+        }
         return res.status(200).json({ message: helper.emailMessage });
     } catch (error) {
         console.error("Error during sent email:", error);
