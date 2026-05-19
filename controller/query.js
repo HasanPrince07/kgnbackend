@@ -119,7 +119,7 @@ exports.replyquery = async (req, res) => {
             attachments: attachments.length > 0 ? attachments : undefined
         });
         if (emailResponse.error) {
-            console.error("Resend API Error:", emailResponse.error);
+            console.log("Resend API Error:", emailResponse.error);
             return res.status(400).json({ message: helper.sentMessage });
         }
         await queryT.findByIdAndUpdate(id, { status: 'replied' });
@@ -129,7 +129,7 @@ exports.replyquery = async (req, res) => {
         }
         return res.status(200).json({ message: helper.emailMessage });
     } catch (error) {
-        console.error("Error during sent email:", error);
+        console.log("Error during sent email:", error);
         return res.status(500).json({ message: helper.serverMessage });
     }
 };
