@@ -113,6 +113,7 @@ exports.replyquery = async (req, res) => {
                 content: fileBuffer,
             });
         }
+        console.log("attacthments ->",attachments)
         const emailResponse = await resend.emails.send({
             from: from,
             to: [email],
