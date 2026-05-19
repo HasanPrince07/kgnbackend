@@ -103,7 +103,6 @@ exports.multideletequery = async (req, res) => {
 exports.replyquery = async (req, res) => {
     const { email, from, subject, body } = req.body;
     const id = req.params.id;
-    console.log(req.file)
     try {
         let attachments = [];
         if (req.file) {
