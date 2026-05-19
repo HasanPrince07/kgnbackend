@@ -1,5 +1,10 @@
 const queryT = require("../model/query");
 const helper = require("../helper/message");
+const fs = require("fs");
+const { Resend } = require("resend");
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 
 exports.fetchquery = async (req, res) => {
     try {
@@ -96,65 +101,36 @@ exports.multideletequery = async (req, res) => {
 }
 
 exports.replyquery = async (req, res) => {
-    const { email, from, subject, body } = req.body
-    const id = req.params.id
-    if (req.file === undefined) {
-        try {
-            // const transporter = nodemailer.createTransport({
-            //     host: "smtp.gmail.com",
-            //     port: 465,
-            //     secure: true,
-            //     auth: {
-            //         user: from,
-            //         pass: "lnhdnirlkaopljvc",
-            //     },
-            // });
-            // const info = await transporter.sendMail({
-            //     from: from,
-            //     to: to,
-            //     subject: subject,
-            //     text: body,
-            // });
-            await queryT.findByIdAndUpdate(id, { status: 'replied' });
-            res.status(200).json({
-                message: helper.emailMessage
-            });
-        } catch (error) {
-            console.error("Error during sent email:", error);
-            res.status(500).json({
-                message: helper.serverMessage
+    const { email, from, subject, body } = req.body;
+    const id = req.params.id;
+    try {
+        let attachments = [];
+        if (req.file) {
+            const filepath = req.file.path;
+            const fileBuffer = fs.readFileSync(filepath);
+            attachments.push({
+                filename: req.file.originalname,
+                content: fileBuffer,
             });
         }
-    } else {
-        const filepath = req.file.path
-        try {
-            // const transporter = nodemailer.createTransport({
-            //     host: "smtp.gmail.com",
-            //     port: 465,
-            //     secure: true,
-            //     auth: {
-            //         user: from,
-            //         pass: "lnhdnirlkaopljvc",
-            //     },
-            // });
-            // const info = await transporter.sendMail({
-            //     from: from,
-            //     to: to,
-            //     subject: subject,
-            //     text: body,
-            //     attachments: [{
-            //         path: filepath
-            //     }]
-            // });
-            await queryT.findByIdAndUpdate(id, { status: 'replied' })
-            res.status(200).json({
-                message: helper.emailMessage
-            });
-        } catch (error) {
-            console.error("Error during sent email:", error);
-            res.status(200).json({
-                message: helper.serverMessage
-            });
+        const emailResponse = await resend.emails.send({
+            from: from,
+            to: [email],
+            subject: subject,
+            text: body,
+            attachments: attachments.length > 0 ? attachments : undefined
+        });
+        if (emailResponse.error) {
+            console.error("Resend API Error:", emailResponse.error);
+            return res.status(400).json({ message: helper.sentMessage });
         }
+        await queryT.findByIdAndUpdate(id, { status: 'replied' });
+        if (req.file) {
+            fs.unlinkSync(req.file.path);
+        }
+        return res.status(200).json({ message: helper.emailMessage });
+    } catch (error) {
+        console.error("Error during sent email:", error);
+        return res.status(500).json({ message: helper.serverMessage });
     }
-}
+};
