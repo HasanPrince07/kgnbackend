@@ -96,6 +96,7 @@ router.get("/deleteproduct/:id", verifyToken, productC.deleteproduct);
 router.get("/fetchproductbyid/:id", verifyToken, productC.fetchproductbyid);
 
 router.post("/login", userC.login);
+router.post("/forgot", userC.forgot);
 router.get("/logout", userC.logout);
 router.get("/checkAuth", verifyToken, userC.checkAuth);
 
