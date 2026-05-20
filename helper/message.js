@@ -9,6 +9,7 @@ const messages = {
     applyMessage: "Thanks for apply",
     emailMessage: "Email sent successfully",
     sentMessage: "We couldn't sent email",
+    existMessage: "Link sent if email exists",
     dataMessage: "We couldn't find any records",
     serverMessage: "Something went wrong, please try again later",
     tokenMessage: "Session expired. Please log in again",
