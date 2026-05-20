@@ -114,6 +114,7 @@ exports.replyquery = async (req, res) => {
         const emailResponse = await resend.emails.send({
             from: from,
             to: [email],
+            replyTo: "hasanprince0786@gmail.com",
             subject: subject,
             text: body,
             attachments: attachments.length > 0 ? attachments : undefined
