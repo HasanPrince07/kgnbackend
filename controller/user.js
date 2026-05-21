@@ -119,7 +119,7 @@ exports.forgot = async (req, res) => {
                     <div style="text-align: center; margin: 30px 0;">
                         <a href="${resetUrl}" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold;">reset password</a>
                     </div>
-                    <p style="color: #555;">This link will be valid only for <b>15 minutes</b> due to security reasons.</p>
+                    <p style="color: #555;">This link will be valid only for <b>5 minutes</b> due to security reasons.</p>
                     <p style="font-size: 12px; color: #999;">If you didn't request this, please ignore this email. Your old password will remain secure.</p>
                     <hr style="border: none; border-top: 1px solid #eee;" />
                     <p style="font-size: 12px; color: #666;">KGN Electrodes Team</p>
