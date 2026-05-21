@@ -3,6 +3,8 @@ const messages = {
     insertMessage: "Entry has been saved",
     updateMessage: "Changes updated successfully",
     deleteMessage: "Record has been removed",
+    resetMessage: "Password updated succesfully",
+    matchMessage: "Password not matched",
     loginMessage: "Login successfully",
     logoutMessage: "Logout successfully",
     credentialMessage: "Wrong credentials",
