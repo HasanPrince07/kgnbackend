@@ -98,11 +98,13 @@ exports.checkAuth = async (req, res) => {
 exports.forgot = async (req, res) => {
     try {
         const { email } = req.body
-        const record = await userT.findOne({ email: email }).lean();
+        const record = await userT.findOne({ email: email.trim().toLowerCase() });
         if (!record) { return res.status(200).json({ message: helper.existMessage }) }
-        const resetToken = crypto.randomBytes(20).toString('hex');
-        const expiryDate = Date.now() + 15 * 60 * 1000;
-        await userT.findOneAndUpdate({ email: email }, { $set: { resetPasswordToken: resetToken, resetPasswordExpires: expiryDate } });
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        const expiryDate = Date.now() + 5 * 60 * 1000;
+        record.resetPasswordToken = resetToken
+        record.resetPasswordExpires = expiryDate
+        await record.save();
         const resetUrl = `https://kgnelectrodes/reset/${resetToken}`;
         const emailResponse = await resend.emails.send({
             from: "KGN Electrodes <info@kgnelectrodes.com>",
@@ -124,7 +126,35 @@ exports.forgot = async (req, res) => {
                 </div>
       `
         });
+        if (emailResponse.error) {
+            console.log("Resend API Error:", emailResponse.error);
+            record.resetPasswordToken = undefined;
+            record.resetPasswordExpires = undefined;
+            await record.save();
+            return res.status(400).json({ message: helper.sentMessage });
+        }
         res.status(200).json({ message: helper.existMessage })
+    } catch (error) {
+        console.log("Error during forgot:", error);
+        res.status(500).json({
+            message: helper.serverMessage
+        });
+    }
+}
+
+exports.reset = async (req, res) => {
+    try {
+        const { newpass, cpass } = req.body
+        const { id } = req.params
+        if (newpass.trim() !== cpass.trim()) { return res.status(400).json({ message: helper.matchMessage }); }
+        const record = await userT.findOne({ resetPasswordToken: id, resetPasswordExpires: { $gt: Date.now() } });
+        if (!record) { return res.status(400).json({ message: "The password reset link is invalid or has expired (15 minutes)." }); }
+        const hashedPassword = await bcrypt.hash(newpass.trim(), 10);
+        record.password = hashedPassword;
+        record.resetPasswordToken = undefined;
+        record.resetPasswordExpires = undefined;
+        await record.save();
+        return res.status(200).json({ message: helper.resetMessage });
     } catch (error) {
         console.log("Error during forgot:", error);
         res.status(500).json({
