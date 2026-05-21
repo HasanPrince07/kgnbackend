@@ -105,7 +105,7 @@ exports.forgot = async (req, res) => {
         record.resetPasswordToken = resetToken
         record.resetPasswordExpires = expiryDate
         await record.save();
-        const resetUrl = `https://kgnelectrodes/reset/${resetToken}`;
+        const resetUrl = `https://kgnelectrodes.com/reset/${resetToken}`;
         const emailResponse = await resend.emails.send({
             from: "KGN Electrodes <info@kgnelectrodes.com>",
             to: [email],
