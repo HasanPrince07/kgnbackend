@@ -27,6 +27,9 @@ app.use(express.static('public', {
 }));
 app.use('/admin', adminRouter);
 app.use('/user', userRouter);
+app.get('/api/ping', (req, res) => {
+    return res.status(200).json({ message: "Server is alive!" });
+});
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => { console.log(`server is running on port ${PORT}`) });
