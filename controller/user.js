@@ -1,7 +1,10 @@
 const userT = require("../model/user");
 const helper = require("../helper/message");
+const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { Resend } = require("resend");
+const resend = new Resend(process.env.RESEND_API_KEY);
 const secretKey = process.env.SECRET_KEY;
 
 exports.fetchuser = async (req, res) => {
@@ -86,6 +89,44 @@ exports.checkAuth = async (req, res) => {
         res.status(200).json({ authenticated: true });
     } catch (error) {
         console.log("Error during authentication:", error);
+        res.status(500).json({
+            message: helper.serverMessage
+        });
+    }
+}
+
+exports.forgot = async (req, res) => {
+    try {
+        const { email } = req.body
+        const record = await userT.findOne({ email: email }).lean();
+        if (!record) { return res.status(200).json({ message: helper.existMessage }) }
+        const resetToken = crypto.randomBytes(20).toString('hex');
+        const expiryDate = Date.now() + 15 * 60 * 1000;
+        await userT.findOneAndUpdate({ email: email }, { $set: { resetPasswordToken: resetToken, resetPasswordExpires: expiryDate } });
+        const resetUrl = `https://kgnelectrodes/reset/${resetToken}`;
+        const emailResponse = await resend.emails.send({
+            from: "KGN Electrodes <info@kgnelectrodes.com>",
+            to: [email],
+            replyTo: "hasanprince0786@gmail.com",
+            subject: "Password Reset Request - KGN Electrodes",
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee;">
+                    <h2 style="color: #333;">Password reset request</h2>
+                    <p>Hello,</p>
+                    <p>We've received a password reset request for your account. Click the button below to change your password:</p>
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="${resetUrl}" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold;">reset password</a>
+                    </div>
+                    <p style="color: #555;">This link will be valid only for <b>15 minutes</b> due to security reasons.</p>
+                    <p style="font-size: 12px; color: #999;">If you didn't request this, please ignore this email. Your old password will remain secure.</p>
+                    <hr style="border: none; border-top: 1px solid #eee;" />
+                    <p style="font-size: 12px; color: #666;">KGN Electrodes Team</p>
+                </div>
+      `
+        });
+        res.status(200).json({ message: helper.existMessage })
+    } catch (error) {
+        console.log("Error during forgot:", error);
         res.status(500).json({
             message: helper.serverMessage
         });
