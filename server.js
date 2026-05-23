@@ -27,8 +27,7 @@ app.use(express.static('public', {
 }));
 app.use('/admin', adminRouter);
 app.use('/user', userRouter);
-app.get('/api/ping', (req, res) => {
-    console.log("Server is alive")
+app.get('/cronjob/ping', (req, res) => {
     return res.status(200).json({ message: "Server is alive!" });
 });
 
